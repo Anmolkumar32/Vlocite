@@ -1,15 +1,26 @@
+// src/pages/Vlogs.js
+import React from 'react';
+import Card from '../components/Card';
+
 const Vlogs = () => {
-    return (
-      <div>
-        <h1>Our Latest Vlogs</h1>
-        <ul>
-          <li>🌍 Traveling to Paris</li>
-          <li>📸 A Day in the Life of a Vlogger</li>
-          <li>🍜 Food Tour in Japan</li>
-        </ul>
-      </div>
-    );
-  };
-  
-  export default Vlogs;
-  
+  const vlogs = [
+    { title: 'Vlog 1', description: 'This is the first vlog.', imageUrl: '/path-to-image1.jpg' },
+    { title: 'Vlog 2', description: 'This is the second vlog.', imageUrl: '/path-to-image2.jpg' },
+    { title: 'Vlog 3', description: 'This is the third vlog.', imageUrl: '/path-to-image3.jpg' },
+  ];
+
+  return (
+    <div className="vlogs">
+      {vlogs.map((vlog, index) => (
+        <Card 
+          key={index}
+          title={vlog.title}
+          description={vlog.description}
+          imageUrl={vlog.imageUrl}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default Vlogs;
