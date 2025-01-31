@@ -1,26 +1,30 @@
 // src/pages/Vlogs.js
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Card from '../components/Card';
 
 const Vlogs = () => {
-  const vlogs = [
-    { title: 'Vlog 1', description: 'This is the first vlog.', imageUrl: '/path-to-image1.jpg' },
-    { title: 'Vlog 2', description: 'This is the second vlog.', imageUrl: '/path-to-image2.jpg' },
-    { title: 'Vlog 3', description: 'This is the third vlog.', imageUrl: '/path-to-image3.jpg' },
-  ];
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/cards")
+      .then(response => setCards(response.data))
+      .catch(error => console.error("Error fetching cards:", error));
+  }, []);
 
   return (
-    <div className="vlogs">
-      {vlogs.map((vlog, index) => (
-        <Card 
-          key={index}
-          title={vlog.title}
-          description={vlog.description}
-          imageUrl={vlog.imageUrl}
-        />
-      ))}
+    <div>
+      <h2>Vlogs</h2>
+      <div>
+        {cards.map((card) => (
+          <div key={card.id}>
+            <h3>{card.title}</h3>
+            <p>{card.description}</p>
+            {card.image_url && <img src={card.image_url} alt={card.title} width="200" />}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
-
 export default Vlogs;

@@ -1,50 +1,34 @@
-// src/pages/AdminDashboard.js
-import React, { useState } from 'react';
-import Card from '../components/Card';
+import React, { useState } from "react";
+import axios from "axios";
 
 const AdminDashboard = () => {
-  const [cards, setCards] = useState([]);
-  const [newCard, setNewCard] = useState({
-    title: '',
-    description: '',
-    imageUrl: '',
-  });
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleAddCard = () => {
-    setCards([...cards, newCard]);
-    setNewCard({ title: '', description: '', imageUrl: '' }); // Reset form
+    if (!title || !description) {
+      alert("Title and description are required");
+      return;
+    }
+
+    axios.post("http://localhost:5000/api/cards", { title, description, image_url: imageUrl })
+      .then(() => {
+        alert("Card added successfully");
+        setTitle("");
+        setDescription("");
+        setImageUrl("");
+      })
+      .catch(error => console.error("Error adding card:", error));
   };
 
   return (
     <div>
       <h2>Admin Dashboard</h2>
-      <div>
-        <h3>Add New Card</h3>
-        <input
-          type="text"
-          placeholder="Title"
-          value={newCard.title}
-          onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
-        />
-        <textarea
-          placeholder="Description"
-          value={newCard.description}
-          onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Image URL"
-          value={newCard.imageUrl}
-          onChange={(e) => setNewCard({ ...newCard, imageUrl: e.target.value })}
-        />
-        <button onClick={handleAddCard}>Add Card</button>
-      </div>
-      <div>
-        <h3>Cards List</h3>
-        {cards.map((card, index) => (
-          <Card key={index} title={card.title} description={card.description} imageUrl={card.imageUrl} />
-        ))}
-      </div>
+      <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <input type="text" placeholder="Image URL (optional)" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
+      <button onClick={handleAddCard}>Add Card</button>
     </div>
   );
 };
